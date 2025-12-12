@@ -1,8 +1,4 @@
-"""
-Exploratory Data Analysis (EDA) - Complete Implementation
-Author: [Your Name]
-Date: December 2025
-"""
+#Exploratory Data Analysis (EDA) - Complete Implementation
 
 import pandas as pd
 import numpy as np
@@ -12,14 +8,10 @@ from scipy import stats
 import warnings
 warnings.filterwarnings('ignore')
 
-# Set style for better visualizations
 sns.set_style("whitegrid")
 plt.rcParams['figure.figsize'] = (12, 6)
 
 class EDAAnalyzer:
-    """
-    A comprehensive class for performing Exploratory Data Analysis
-    """
     
     def __init__(self, filepath):
         """Initialize with dataset filepath"""
@@ -28,7 +20,7 @@ class EDAAnalyzer:
         self.load_data()
     
     def load_data(self):
-        """Load dataset from file"""
+       
         try:
             if self.filepath.endswith('.csv'):
                 self.df = pd.read_csv(self.filepath)
@@ -41,9 +33,7 @@ class EDAAnalyzer:
             print(f"✗ Error loading data: {e}")
     
     def ask_meaningful_questions(self):
-        """
-        Step 1: Ask meaningful questions about the dataset
-        """
+        
         print("\n" + "="*80)
         print("STEP 1: MEANINGFUL QUESTIONS ABOUT THE DATASET")
         print("="*80)
@@ -64,9 +54,7 @@ class EDAAnalyzer:
         print()
     
     def explore_data_structure(self):
-        """
-        Step 2: Explore data structure, variables, and data types
-        """
+        
         print("\n" + "="*80)
         print("STEP 2: DATA STRUCTURE EXPLORATION")
         print("="*80)
@@ -90,7 +78,7 @@ class EDAAnalyzer:
         print("\n📊 Statistical Summary (Numerical Columns):")
         print(self.df.describe())
         
-        # Identify column types
+       
         self.numerical_cols = self.df.select_dtypes(include=[np.number]).columns.tolist()
         self.categorical_cols = self.df.select_dtypes(include=['object', 'category']).columns.tolist()
         
@@ -98,9 +86,7 @@ class EDAAnalyzer:
         print(f"✓ Categorical Columns ({len(self.categorical_cols)}): {self.categorical_cols}")
     
     def identify_data_quality_issues(self):
-        """
-        Step 5 (moved up): Detect potential data issues
-        """
+       
         print("\n" + "="*80)
         print("STEP 3: DATA QUALITY ASSESSMENT")
         print("="*80)
@@ -118,7 +104,7 @@ class EDAAnalyzer:
         if len(missing_df) > 0:
             print(missing_df)
             
-            # Visualize missing values
+           
             plt.figure(figsize=(10, 6))
             missing_df['Missing_Percentage'].plot(kind='barh', color='coral')
             plt.xlabel('Missing Percentage (%)')
@@ -130,12 +116,11 @@ class EDAAnalyzer:
         else:
             print("   ✓ No missing values found!")
         
-        # Duplicate rows
+        
         print("\n🔍 Duplicate Rows:")
         duplicates = self.df.duplicated().sum()
         print(f"   Total duplicates: {duplicates} ({(duplicates/len(self.df)*100):.2f}%)")
-        
-        # Data type issues
+      
         print("\n🔍 Potential Data Type Issues:")
         for col in self.df.columns:
             if self.df[col].dtype == 'object':
@@ -146,14 +131,12 @@ class EDAAnalyzer:
                     pass
     
     def identify_patterns_and_trends(self):
-        """
-        Step 3: Identify trends, patterns, and anomalies
-        """
+       
         print("\n" + "="*80)
         print("STEP 4: PATTERNS, TRENDS, AND ANOMALIES")
         print("="*80)
         
-        # Distribution analysis for numerical columns
+    
         if len(self.numerical_cols) > 0:
             print("\n📊 Distribution Analysis (Numerical Variables):")
             
@@ -169,14 +152,14 @@ class EDAAnalyzer:
                 axes[idx].set_xlabel(col)
                 axes[idx].set_ylabel('Frequency')
                 
-                # Add statistics
+               
                 mean_val = self.df[col].mean()
                 median_val = self.df[col].median()
                 axes[idx].axvline(mean_val, color='red', linestyle='--', label=f'Mean: {mean_val:.2f}')
                 axes[idx].axvline(median_val, color='green', linestyle='--', label=f'Median: {median_val:.2f}')
                 axes[idx].legend()
             
-            # Hide extra subplots
+            
             for idx in range(len(self.numerical_cols), len(axes)):
                 axes[idx].axis('off')
             
@@ -185,7 +168,7 @@ class EDAAnalyzer:
             print("   ✓ Distribution plots saved: distributions.png")
             plt.close()
         
-        # Outlier detection using IQR method
+      
         print("\n🔍 Outlier Detection (IQR Method):")
         outlier_summary = {}
         
@@ -202,7 +185,7 @@ class EDAAnalyzer:
             if len(outliers) > 0:
                 print(f"   {col}: {len(outliers)} outliers ({len(outliers)/len(self.df)*100:.2f}%)")
         
-        # Box plots for outlier visualization
+ 
         if len(self.numerical_cols) > 0:
             fig, axes = plt.subplots(1, min(4, len(self.numerical_cols)), figsize=(15, 5))
             if len(self.numerical_cols) == 1:
@@ -218,10 +201,10 @@ class EDAAnalyzer:
             print("   ✓ Boxplot saved: boxplots_outliers.png")
             plt.close()
         
-        # Categorical variable analysis
+       
         if len(self.categorical_cols) > 0:
             print("\n📊 Categorical Variables Analysis:")
-            for col in self.categorical_cols[:5]:  # First 5 categorical columns
+            for col in self.categorical_cols[:5]: 
                 print(f"\n   {col}:")
                 value_counts = self.df[col].value_counts()
                 print(f"      Unique values: {len(value_counts)}")
@@ -235,9 +218,9 @@ class EDAAnalyzer:
         print("STEP 5: HYPOTHESIS TESTING & VALIDATION")
         print("="*80)
         
-        # Normality tests for numerical columns
+        
         print("\n📊 Normality Tests (Shapiro-Wilk):")
-        for col in self.numerical_cols[:5]:  # Test first 5 numerical columns
+        for col in self.numerical_cols[:5]: 
             sample = self.df[col].dropna().sample(min(5000, len(self.df[col].dropna())))
             stat, p_value = stats.shapiro(sample)
             is_normal = "Yes" if p_value > 0.05 else "No"
@@ -273,7 +256,7 @@ class EDAAnalyzer:
             else:
                 print("      No strong correlations found")
         
-        # Chi-square test for categorical variables
+        # test for categorical variables
         if len(self.categorical_cols) >= 2:
             print("\n📊 Chi-Square Test (Categorical Independence):")
             cat1, cat2 = self.categorical_cols[0], self.categorical_cols[1]
@@ -297,7 +280,7 @@ class EDAAnalyzer:
         # Dataset overview
         insights.append(f"✓ Dataset contains {self.df.shape[0]:,} records and {self.df.shape[1]} features")
         
-        # Missing data insight
+       
         missing_pct = (self.df.isnull().sum().sum() / (self.df.shape[0] * self.df.shape[1])) * 100
         if missing_pct > 5:
             insights.append(f"⚠ {missing_pct:.2f}% of data is missing - consider imputation strategies")
@@ -306,7 +289,7 @@ class EDAAnalyzer:
         else:
             insights.append("✓ No missing values detected - clean dataset")
         
-        # Outlier insight
+      
         outlier_cols = []
         for col in self.numerical_cols:
             Q1, Q3 = self.df[col].quantile(0.25), self.df[col].quantile(0.75)
@@ -318,7 +301,7 @@ class EDAAnalyzer:
         if outlier_cols:
             insights.append(f"⚠ Significant outliers detected in: {', '.join(outlier_cols)}")
         
-        # Distribution insight
+
         skewed_cols = []
         for col in self.numerical_cols:
             skewness = self.df[col].skew()
@@ -363,7 +346,7 @@ class EDAAnalyzer:
         print("="*80)
 
 
-# Example usage
+
 if __name__ == "__main__":
     # Replace with your dataset path
     dataset_path = "your_dataset.csv"
@@ -377,4 +360,3 @@ if __name__ == "__main__":
     # You can also run individual steps:
     # eda.ask_meaningful_questions()
     # eda.explore_data_structure()
-    # etc.
